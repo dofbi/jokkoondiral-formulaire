@@ -41,6 +41,9 @@ export default function FormulaireWizard() {
   const methods = useForm<FormulaireData>({
     resolver: zodResolver(formulaireSchema),
     mode: 'onBlur',
+    defaultValues: {
+      priorisations: [],
+    },
   })
 
   const { handleSubmit, trigger } = methods
@@ -190,7 +193,7 @@ function getStepFields(step: number): string[] {
     case 4: return ['types_preuves', 'alternative_video', 'horodatage']
     case 5: return ['canal_coordinateurs']
     case 6: return ['qualite_connexion', 'appareils', 'importance_legerete', 'cout_serveur_max']
-    case 7: return ['priorisations']
+    case 7: return [] // Priorisations optionnelles
     case 8: return ['priorite_controle', 'capacite_hebergement']
     case 9: return ['outil_ideal']
     case 10: return ['echeance_outil', 'dispo_tech_camp']

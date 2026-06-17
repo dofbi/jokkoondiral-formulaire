@@ -202,7 +202,7 @@ export const formulaireSchema = z.object({
     fonctionnalite_id: z.number(),
     note: z.number().min(1).max(5),
     non_negociable: z.boolean(),
-  })),
+  })).optional(),
 
   // Section 9: Sécurité
   priorite_controle: z.enum(prioriteControleList),

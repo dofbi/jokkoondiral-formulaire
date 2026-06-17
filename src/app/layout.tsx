@@ -13,6 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
+      <head>
+        <link rel="icon" type="image/svg+xml" href="/icons/Icone.svg" />
+      </head>
       <body className="bg-gray-50 min-h-screen">
         {children}
       </body>

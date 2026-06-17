@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import FormulaireWizard from '@/components/FormulaireWizard'
 
 export default function Home() {
@@ -7,12 +6,12 @@ export default function Home() {
       {/* Header */}
       <header className="bg-jokko-primary text-white py-6">
         <div className="max-w-4xl mx-auto px-4 flex items-center space-x-4">
-          <Image
+          <img
             src="/icons/Icone.svg"
             alt="Jokkoondiral"
             width={48}
             height={48}
-            className="rounded-lg"
+            className="rounded-lg bg-white p-1"
           />
           <div>
             <h1 className="text-2xl font-bold">JOKKOONDIRAL</h1>
