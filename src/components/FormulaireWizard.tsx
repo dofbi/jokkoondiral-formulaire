@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formulaireSchema, type FormulaireData } from '@/schemas/formulaire'
+import { formulaireSchema, type FormulaireData, PAYS_IDS } from '@/schemas/formulaire'
 import { ProgressBar } from './ProgressBar'
 import { Step1Organisation } from './steps/Step1Organisation'
 import { Step2Experience } from './steps/Step2Experience'
@@ -79,10 +79,11 @@ export default function FormulaireWizard() {
     setSubmitError('')
 
     try {
-      // 1. Créer l'organisation
+      // 1. Créer l'organisation avec le lien pays
+      const paysId = PAYS_IDS[data.pays]
       const orgResult = await createRecord('mffdpajfcqrlhyb', {
         nom: data.nom_organisation,
-        pays: data.pays,
+        pays: paysId ? [{ Id: paysId }] : undefined,
         type_org: Array.isArray(data.type_organisation)
           ? data.type_organisation.join(',')
           : data.type_organisation,

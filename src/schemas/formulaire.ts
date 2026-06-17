@@ -111,6 +111,13 @@ export const paysList = [
   'Tchad', 'RDC', 'Gabon', 'République Centrafricaine', 'Autre'
 ] as const
 
+// IDs NocoDB table pays — ordre identique à paysList (seedé le 2026-06-17)
+export const PAYS_IDS: Record<string, number> = {
+  'Sénégal': 1, 'Côte d\'Ivoire': 2, 'Mali': 3, 'Burkina Faso': 4, 'Niger': 5,
+  'Guinée': 6, 'Bénin': 7, 'Togo': 8, 'Ghana': 9, 'Nigéria': 10, 'Cameroun': 11,
+  'Tchad': 12, 'RDC': 13, 'Gabon': 14, 'République Centrafricaine': 15, 'Autre': 16,
+}
+
 export const typeOrgList = [
   'OSC nationale',
   'Média citoyen',
