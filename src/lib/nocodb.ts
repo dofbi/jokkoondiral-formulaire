@@ -12,7 +12,8 @@ export async function createRecord(tableId: string, data: Record<string, unknown
   })
 
   if (!response.ok) {
-    throw new Error(`Erreur API: ${response.statusText}`)
+    const body = await response.json().catch(() => ({}))
+    throw new Error(`Erreur API ${response.status}: ${body.error || JSON.stringify(body)}`)
   }
 
   return response.json()
@@ -24,7 +25,8 @@ export async function getRecords(tableId: string) {
   })
 
   if (!response.ok) {
-    throw new Error(`Erreur API: ${response.statusText}`)
+    const body = await response.json().catch(() => ({}))
+    throw new Error(`Erreur API ${response.status}: ${body.error || JSON.stringify(body)}`)
   }
 
   return response.json()

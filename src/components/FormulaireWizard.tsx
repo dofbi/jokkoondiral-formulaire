@@ -131,8 +131,9 @@ export default function FormulaireWizard() {
 
       setSubmitSuccess(true)
     } catch (error) {
-      setSubmitError('Erreur lors de l\'envoi du formulaire. Veuillez réessayer.')
-      console.error(error)
+      const msg = error instanceof Error ? error.message : String(error)
+      setSubmitError(`Erreur lors de l'envoi : ${msg}`)
+      console.error('Submit error:', error)
     } finally {
       setIsSubmitting(false)
     }
