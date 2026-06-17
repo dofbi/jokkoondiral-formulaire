@@ -17,7 +17,7 @@ export function Step8Priorites() {
       <div className="space-y-4">
         {fonctionnalitesList.map((fonc, index) => (
           <div key={fonc.id} className="bg-gray-50 p-4 rounded-lg">
-            <input type="hidden" value={fonc.id} {...register(`priorisations.${index}.fonctionnalite_id` as const, { valueAsNumber: true })} />
+            <input type="hidden" defaultValue={fonc.id} {...register(`priorisations.${index}.fonctionnalite_id` as const, { valueAsNumber: true })} />
             <div className="flex justify-between items-center mb-2">
               <span className="font-medium">{index + 1}. {fonc.nom}</span>
               <span className="text-xs text-gray-500 uppercase">{fonc.categorie}</span>

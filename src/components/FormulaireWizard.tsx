@@ -77,10 +77,10 @@ export default function FormulaireWizard() {
   const onSubmit = async (data: FormulaireData) => {
     setIsSubmitting(true)
     setSubmitError('')
-    
+
     try {
-      // Créer l'organisation d'abord
-      const orgData = {
+      // 1. Créer l'organisation
+      const orgResult = await createRecord('mffdpajfcqrlhyb', {
         nom: data.nom_organisation,
         pays: data.pays,
         type_org: Array.isArray(data.type_organisation)
@@ -89,11 +89,9 @@ export default function FormulaireWizard() {
         nom_repondant: data.nom_repondant,
         role_repondant: data.role_repondant,
         email_contact: data.email_contact,
-      }
+      })
 
-      const orgResult = await createRecord('mffdpajfcqrlhyb', orgData)
-
-      // Extraire seulement les champs de reponses_osc
+      // 2. Extraire les champs reponses_osc
       const {
         nom_organisation: _n, pays: _p, nom_repondant: _nr,
         role_repondant: _rr, email_contact: _e, type_organisation: _to,
@@ -103,9 +101,10 @@ export default function FormulaireWizard() {
         ...reponseFields
       } = data
 
-      const reponseData = {
+      // 3. Créer la réponse liée à l'organisation
+      const reponseResult = await createRecord('ma6viztihufbutq', {
         statut: 'SOUMIS',
-        organisation_ref_id: orgResult.Id,
+        organisation: [{ Id: orgResult.Id }],
         ...reponseFields,
         visualisations_carto: JSON.stringify(visualisations_carto ?? []),
         canaux_signalement: JSON.stringify(canaux_signalement ?? []),
@@ -114,21 +113,43 @@ export default function FormulaireWizard() {
         evenements_alertes: JSON.stringify(evenements_alertes ?? []),
         appareils: JSON.stringify(appareils ?? []),
         menaces: JSON.stringify(menaces ?? []),
-      }
+      })
 
-      await createRecord('ma6viztihufbutq', reponseData)
-
-      // Outils actuels
+      // 4. Outils actuels liés à la réponse
       if (outils_actuels) {
-        for (const outil of outils_actuels.filter(o => o.usage)) {
-          await createRecord('ml9hjjzm1aoredu', { outil: outil.outil, usage: outil.usage })
+        for (const outil of outils_actuels) {
+          await createRecord('ml9hjjzm1aoredu', {
+            outil: outil.outil,
+            usage: outil.usage,
+            reponse: [{ Id: reponseResult.Id }],
+          })
         }
       }
 
-      // Langues terrain
+      // 5. Langues terrain liées à la réponse
       if (langues_terrain) {
         for (const lang of langues_terrain.filter(l => l.langue)) {
-          await createRecord('msu6yxyfrbye0xg', { langue: lang.langue, priorite: lang.priorite })
+          await createRecord('msu6yxyfrbye0xg', {
+            langue: lang.langue,
+            priorite: lang.priorite,
+            reponse: [{ Id: reponseResult.Id }],
+          })
+        }
+      }
+
+      // 6. Priorisations liées à la réponse et à la fonctionnalité
+      if (priorisations) {
+        for (const prio of priorisations) {
+          const fonctId = typeof prio.fonctionnalite_id === 'string'
+            ? parseInt(prio.fonctionnalite_id)
+            : prio.fonctionnalite_id
+          if (!fonctId) continue
+          await createRecord('mtf25mgvrzw82gu', {
+            note: prio.note,
+            non_negociable: prio.non_negociable ?? false,
+            reponse: [{ Id: reponseResult.Id }],
+            fonctionnalite: [{ Id: fonctId }],
+          })
         }
       }
 
