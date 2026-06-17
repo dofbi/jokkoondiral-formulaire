@@ -270,10 +270,13 @@ export const formulaireSchema = z.object({
   // Section 2: Expérience
   experience_annees: z.enum(experienceAnneesList),
   nb_observateurs: z.enum(nbObservateursList),
-  outils_actuels: z.array(z.object({
-    outil: z.enum(outilsList),
-    usage: z.enum(usageList).optional(),
-  })).optional(),
+  outils_actuels: z.preprocess(
+    (val) => Array.isArray(val) ? val.filter((o: any) => o?.usage) : undefined,
+    z.array(z.object({
+      outil: z.string(),
+      usage: z.string(),
+    })).optional()
+  ),
   problemes_top3: z.string().optional(),
 
   // Section 3: Géolocalisation
@@ -303,12 +306,17 @@ export const formulaireSchema = z.object({
   cout_serveur_max: z.enum(coutServeurList),
 
   // Section 8: Priorités
-  priorisations: z.array(z.object({
-    fonctionnalite_id: z.number().optional(),
-    note: z.preprocess(v => v === '' || v === undefined ? undefined : Number(v),
-      z.number().min(1).max(5).optional()),
-    non_negociable: z.boolean().optional(),
-  })).optional(),
+  priorisations: z.preprocess(
+    (val) => Array.isArray(val) ? val.filter((o: any) => o?.note || o?.non_negociable) : undefined,
+    z.array(z.object({
+      fonctionnalite_id: z.union([z.number(), z.string()]).optional(),
+      note: z.preprocess(
+        v => !v || v === '' ? undefined : Number(v),
+        z.number().min(1).max(5).optional()
+      ),
+      non_negociable: z.boolean().optional(),
+    })).optional()
+  ),
 
   // Section 9: Sécurité
   priorite_controle: z.enum(prioriteControleList),

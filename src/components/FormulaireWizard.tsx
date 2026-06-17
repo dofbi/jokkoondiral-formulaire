@@ -57,6 +57,7 @@ export default function FormulaireWizard() {
   const nextStep = async () => {
     const isValid = await validateStep()
     if (isValid && currentStep < steps.length - 1) {
+      setSubmitError('')
       setCurrentStep(prev => prev + 1)
       window.scrollTo(0, 0)
     }
@@ -64,6 +65,7 @@ export default function FormulaireWizard() {
 
   const prevStep = () => {
     if (currentStep > 0) {
+      setSubmitError('')
       setCurrentStep(prev => prev - 1)
       window.scrollTo(0, 0)
     }
