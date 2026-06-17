@@ -1,0 +1,199 @@
+'use client'
+
+import { useState } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { formulaireSchema, type FormulaireData } from '@/schemas/formulaire'
+import { ProgressBar } from './ProgressBar'
+import { Step1Organisation } from './steps/Step1Organisation'
+import { Step2Experience } from './steps/Step2Experience'
+import { Step3Geolocalisation } from './steps/Step3Geolocalisation'
+import { Step4Canaux } from './steps/Step4Canaux'
+import { Step5Preuves } from './steps/Step5Preuves'
+import { Step6Alertes } from './steps/Step6Alertes'
+import { Step7Performance } from './steps/Step7Performance'
+import { Step8Priorites } from './steps/Step8Priorites'
+import { Step9Securite } from './steps/Step9Securite'
+import { Step10OutilIdeal } from './steps/Step10OutilIdeal'
+import { Step11Timeline } from './steps/Step11Timeline'
+import { createRecord } from '@/lib/nocodb'
+
+const steps = [
+  'Organisation',
+  'Expérience',
+  'Géolocalisation',
+  'Canaux',
+  'Preuves',
+  'Alertes',
+  'Performance',
+  'Priorités',
+  'Sécurité',
+  'Outil idéal',
+  'Timeline',
+]
+
+export default function FormulaireWizard() {
+  const [currentStep, setCurrentStep] = useState(0)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+
+  const methods = useForm<FormulaireData>({
+    resolver: zodResolver(formulaireSchema),
+    mode: 'onBlur',
+  })
+
+  const { handleSubmit, trigger } = methods
+
+  const validateStep = async () => {
+    const stepFields = getStepFields(currentStep)
+    const isValid = await trigger(stepFields as any)
+    return isValid
+  }
+
+  const nextStep = async () => {
+    const isValid = await validateStep()
+    if (isValid && currentStep < steps.length - 1) {
+      setCurrentStep(prev => prev + 1)
+      window.scrollTo(0, 0)
+    }
+  }
+
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(prev => prev - 1)
+      window.scrollTo(0, 0)
+    }
+  }
+
+  const onSubmit = async (data: FormulaireData) => {
+    setIsSubmitting(true)
+    setSubmitError('')
+    
+    try {
+      // Créer l'organisation d'abord
+      const orgData = {
+        nom: data.nom_organisation,
+        pays_id: data.pays,
+        type_org: data.type_organisation,
+        nom_repondant: data.nom_repondant,
+        role_repondant: data.role_repondant,
+        email_contact: data.email_contact,
+      }
+
+      const orgResult = await createRecord('mffdpajfcqrlhyb', orgData)
+      
+      // Puis créer la réponse principale
+      const reponseData = {
+        organisation_id: orgResult.id,
+        statut: 'SOUMIS',
+        ...data,
+      }
+
+      await createRecord('ma6viztihufbutq', reponseData)
+      
+      setSubmitSuccess(true)
+    } catch (error) {
+      setSubmitError('Erreur lors de l\'envoi du formulaire. Veuillez réessayer.')
+      console.error(error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  if (submitSuccess) {
+    return (
+      <div className="max-w-2xl mx-auto p-8 text-center">
+        <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+          <h2 className="text-2xl font-bold text-green-800 mb-4">
+            ✅ Formulaire envoyé avec succès !
+          </h2>
+          <p className="text-green-700">
+            Merci pour votre participation. Votre réponse a été enregistrée.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
+        <ProgressBar 
+          steps={steps} 
+          currentStep={currentStep} 
+        />
+
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="mt-8">
+              {currentStep === 0 && <Step1Organisation />}
+              {currentStep === 1 && <Step2Experience />}
+              {currentStep === 2 && <Step3Geolocalisation />}
+              {currentStep === 3 && <Step4Canaux />}
+              {currentStep === 4 && <Step5Preuves />}
+              {currentStep === 5 && <Step6Alertes />}
+              {currentStep === 6 && <Step7Performance />}
+              {currentStep === 7 && <Step8Priorites />}
+              {currentStep === 8 && <Step9Securite />}
+              {currentStep === 9 && <Step10OutilIdeal />}
+              {currentStep === 10 && <Step11Timeline />}
+            </div>
+
+            {submitError && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                {submitError}
+              </div>
+            )}
+
+            <div className="mt-8 flex justify-between">
+              <button
+                type="button"
+                onClick={prevStep}
+                disabled={currentStep === 0}
+                className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                ← Précédent
+              </button>
+
+              {currentStep < steps.length - 1 ? (
+                <button
+                  type="button"
+                  onClick={nextStep}
+                  className="px-6 py-3 bg-jokko-primary text-white rounded-lg hover:bg-jokko-secondary"
+                >
+                  Suivant →
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-6 py-3 bg-jokko-primary text-white rounded-lg hover:bg-jokko-secondary disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Envoi en cours...' : 'Envoyer le formulaire'}
+                </button>
+              )}
+            </div>
+          </form>
+        </FormProvider>
+      </div>
+    </div>
+  )
+}
+
+function getStepFields(step: number): string[] {
+  switch (step) {
+    case 0: return ['nom_organisation', 'pays', 'nom_repondant', 'email_contact', 'type_organisation']
+    case 1: return ['experience_annees', 'nb_observateurs']
+    case 2: return ['geo_type', 'niveau_geo']
+    case 3: return ['canaux_signalement', 'mode_offline', 'frequence_signalement']
+    case 4: return ['types_preuves', 'alternative_video', 'horodatage']
+    case 5: return ['canal_coordinateurs']
+    case 6: return ['qualite_connexion', 'appareils', 'importance_legerete', 'cout_serveur_max']
+    case 7: return ['priorisations']
+    case 8: return ['priorite_controle', 'capacite_hebergement']
+    case 9: return ['outil_ideal']
+    case 10: return ['echeance_outil', 'dispo_tech_camp']
+    default: return []
+  }
+}

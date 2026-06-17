@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.step-active {
+  @apply bg-jokko-primary text-white;
+}
+
+.step-inactive {
+  @apply bg-gray-200 text-gray-500;
+}
