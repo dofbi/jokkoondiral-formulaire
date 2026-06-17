@@ -114,9 +114,9 @@ export const paysList = [
 export const typeOrgList = [
   'OSC nationale',
   'Média citoyen',
-  'Initiative civic tech',
+  'Civic tech',
   'Situation Room',
-  'Organisation jeunesse',
+  'Org jeunesse',
   'Mouvement jeunes',
   'Autre'
 ] as const

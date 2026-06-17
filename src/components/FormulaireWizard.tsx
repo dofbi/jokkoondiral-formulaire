@@ -46,7 +46,10 @@ export default function FormulaireWizard() {
     },
   })
 
-  const { handleSubmit, trigger } = methods
+  const { handleSubmit, trigger, watch } = methods
+
+  // Efface l'erreur dès que l'utilisateur modifie un champ
+  watch(() => { if (submitError) setSubmitError('') })
 
   const validateStep = async () => {
     const stepFields = getStepFields(currentStep)
