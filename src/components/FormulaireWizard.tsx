@@ -111,7 +111,7 @@ export default function FormulaireWizard() {
         menaces: JSON.stringify(menaces ?? []),
       }
 
-      const reponseResult = await createRecord('ma6viztihufbutq', reponseData)
+      await createRecord('ma6viztihufbutq', reponseData)
 
       // Outils actuels
       if (outils_actuels) {
@@ -160,7 +160,10 @@ export default function FormulaireWizard() {
         />
 
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit, (errors) => {
+              const fields = Object.keys(errors).join(', ')
+              setSubmitError(`Certains champs obligatoires sont manquants. Vérifiez les étapes précédentes. (${fields})`)
+            })}>
             <div className="mt-8">
               {currentStep === 0 && <Step1Organisation />}
               {currentStep === 1 && <Step2Experience />}
