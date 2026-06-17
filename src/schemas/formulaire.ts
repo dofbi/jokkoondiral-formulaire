@@ -272,7 +272,7 @@ export const formulaireSchema = z.object({
   nb_observateurs: z.enum(nbObservateursList),
   outils_actuels: z.array(z.object({
     outil: z.enum(outilsList),
-    usage: z.enum(usageList),
+    usage: z.enum(usageList).optional(),
   })).optional(),
   problemes_top3: z.string().optional(),
 
@@ -304,9 +304,10 @@ export const formulaireSchema = z.object({
 
   // Section 8: Priorités
   priorisations: z.array(z.object({
-    fonctionnalite_id: z.number(),
-    note: z.number().min(1).max(5),
-    non_negociable: z.boolean(),
+    fonctionnalite_id: z.number().optional(),
+    note: z.preprocess(v => v === '' || v === undefined ? undefined : Number(v),
+      z.number().min(1).max(5).optional()),
+    non_negociable: z.boolean().optional(),
   })).optional(),
 
   // Section 9: Sécurité
