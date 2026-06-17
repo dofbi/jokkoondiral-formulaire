@@ -77,24 +77,56 @@ export default function FormulaireWizard() {
       // Créer l'organisation d'abord
       const orgData = {
         nom: data.nom_organisation,
-        pays_id: data.pays,
-        type_org: data.type_organisation,
+        pays: data.pays,
+        type_org: Array.isArray(data.type_organisation)
+          ? data.type_organisation.join(',')
+          : data.type_organisation,
         nom_repondant: data.nom_repondant,
         role_repondant: data.role_repondant,
         email_contact: data.email_contact,
       }
 
       const orgResult = await createRecord('mffdpajfcqrlhyb', orgData)
-      
-      // Puis créer la réponse principale
+
+      // Extraire seulement les champs de reponses_osc
+      const {
+        nom_organisation: _n, pays: _p, nom_repondant: _nr,
+        role_repondant: _rr, email_contact: _e, type_organisation: _to,
+        outils_actuels, priorisations, langues_terrain,
+        visualisations_carto, canaux_signalement, types_preuves,
+        types_alertes, evenements_alertes, appareils, menaces,
+        ...reponseFields
+      } = data
+
       const reponseData = {
-        organisation_id: orgResult.id,
         statut: 'SOUMIS',
-        ...data,
+        organisation_ref_id: orgResult.Id,
+        ...reponseFields,
+        visualisations_carto: JSON.stringify(visualisations_carto ?? []),
+        canaux_signalement: JSON.stringify(canaux_signalement ?? []),
+        types_preuves: JSON.stringify(types_preuves ?? []),
+        types_alertes: JSON.stringify(types_alertes ?? []),
+        evenements_alertes: JSON.stringify(evenements_alertes ?? []),
+        appareils: JSON.stringify(appareils ?? []),
+        menaces: JSON.stringify(menaces ?? []),
       }
 
-      await createRecord('ma6viztihufbutq', reponseData)
-      
+      const reponseResult = await createRecord('ma6viztihufbutq', reponseData)
+
+      // Outils actuels
+      if (outils_actuels) {
+        for (const outil of outils_actuels.filter(o => o.usage)) {
+          await createRecord('ml9hjjzm1aoredu', { outil: outil.outil, usage: outil.usage })
+        }
+      }
+
+      // Langues terrain
+      if (langues_terrain) {
+        for (const lang of langues_terrain.filter(l => l.langue)) {
+          await createRecord('msu6yxyfrbye0xg', { langue: lang.langue, priorite: lang.priorite })
+        }
+      }
+
       setSubmitSuccess(true)
     } catch (error) {
       setSubmitError('Erreur lors de l\'envoi du formulaire. Veuillez réessayer.')

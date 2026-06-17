@@ -1,17 +1,25 @@
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
-import { typesPreuvesList, alternativeVideoList, horodatageList } from '@/schemas/formulaire'
+import { typesPreuvesList, alternativeVideoList, horodatageList, LABELS } from '@/schemas/formulaire'
 
 export function Step5Preuves() {
   const { register } = useFormContext()
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-jokko-primary mb-6">
-        5. Types de preuves
+      <h2 className="text-2xl font-bold text-jokko-primary mb-2">
+        5. Types de preuves &amp; pièces jointes
       </h2>
+      <p className="text-gray-500 text-sm mb-6">
+        Quels types de preuves vos observateurs peuvent-ils collecter et joindre à leurs signalements ?
+      </p>
 
-      <FormField name="types_preuves" label="Types de preuves collectées" required>
+      <FormField
+        name="types_preuves"
+        label="Types de preuves collectées"
+        description="Sélectionnez tous les types de preuves que vos observateurs peuvent collecter sur le terrain (selon leurs appareils disponibles)."
+        required
+      >
         <div className="space-y-2">
           {typesPreuvesList.map(type => (
             <label key={type} className="flex items-center space-x-2">
@@ -27,26 +35,36 @@ export function Step5Preuves() {
         </div>
       </FormField>
 
-      <FormField name="alternative_video" label="Alternative si vidéo impossible" required>
+      <FormField
+        name="alternative_video"
+        label="Alternative si vidéo impossible"
+        description="Si l'envoi de vidéo est impossible (connexion trop lente ou stockage insuffisant), quelle est la meilleure alternative pour documenter un incident ?"
+        required
+      >
         <select
           {...register('alternative_video')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
           <option value="">Sélectionnez</option>
           {alternativeVideoList.map(opt => (
-            <option key={opt} value={opt}>{opt}</option>
+            <option key={opt} value={opt}>{LABELS.alternativeVideo[opt]}</option>
           ))}
         </select>
       </FormField>
 
-      <FormField name="horodatage" label="Horodatage nécessaire" required>
+      <FormField
+        name="horodatage"
+        label="Horodatage automatique"
+        description="L'horodatage automatique enregistre la date et l'heure exactes de la saisie, garantissant l'authenticité du signalement."
+        required
+      >
         <select
           {...register('horodatage')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
           <option value="">Sélectionnez</option>
           {horodatageList.map(opt => (
-            <option key={opt} value={opt}>{opt}</option>
+            <option key={opt} value={opt}>{LABELS.horodatage[opt]}</option>
           ))}
         </select>
       </FormField>

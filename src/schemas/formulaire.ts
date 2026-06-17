@@ -1,5 +1,110 @@
 import { z } from 'zod'
 
+// Label maps: valeur interne → libellé affiché
+export const LABELS = {
+  experienceAnnees: {
+    '0': 'Non — première fois',
+    '1-2': '1 à 2 ans',
+    '3-4': '3 à 4 ans',
+    '5+': '5 ans et plus',
+  },
+  geoType: {
+    'auto': 'Oui — géolocalisation automatique',
+    'manuelle': 'Oui — saisie manuelle de la position',
+    'non': 'Non, pas nécessaire',
+    'nsp': 'Je ne sais pas',
+  },
+  niveauGeo: {
+    'bureau_vote': 'Bureau de vote',
+    'commune': 'Commune',
+    'departement': 'Département',
+    'region': 'Région',
+    'national': 'National',
+  },
+  modeOffline: {
+    'critique': 'Oui — critique (zones sans connexion)',
+    'secondaire': 'Oui — secondaire (utile mais pas bloquant)',
+    'non': 'Non',
+    'nsp': 'Je ne sais pas',
+  },
+  frequenceSignalement: {
+    'continu': 'En continu (flux temps réel)',
+    'quelques_heure': 'Quelques fois par heure',
+    'quelques_jour': 'Quelques fois par jour',
+    'une_fois': 'Une fois par session / tour',
+  },
+  alternativeVideo: {
+    'audio_photo': 'Audio + photo',
+    'photo_texte': 'Photo + description texte',
+    'formulaire': 'Formulaire structuré',
+    'video_indispensable': 'La vidéo est indispensable',
+    'sans_objet': 'Sans objet pour nous',
+  },
+  horodatage: {
+    'obligatoire': 'Oui — obligatoire et non modifiable',
+    'modifiable': 'Oui — mais modifiable par l\'observateur',
+    'non': 'Non, pas nécessaire',
+  },
+  canalCoordinateurs: {
+    'smartphone': 'Smartphone uniquement',
+    'ordinateur': 'Ordinateur uniquement',
+    'les_deux': 'Les deux',
+    'nsp': 'Je ne sais pas',
+  },
+  qualiteConnexion: {
+    'bonne': 'Bonne (4G/fibre disponible)',
+    'variable': 'Variable selon les zones',
+    'faible': 'Faible (2G/3G instable)',
+    'tres_faible': 'Très faible (SMS seulement)',
+  },
+  coutServeur: {
+    'lt10eur': 'Moins de 10 €/mois',
+    'lt30eur': 'Moins de 30 €/mois',
+    'non_contraint': 'Pas de contrainte de coût',
+    'nsp': 'Je ne sais pas',
+  },
+  prioriteControle: {
+    'critique_auto': 'Critique — auto-hébergement obligatoire',
+    'important': 'Important — préférons contrôler nos données',
+    'neutre': 'Neutre — cloud tiers acceptable',
+  },
+  capaciteHebergement: {
+    'equipe_interne': 'Oui — équipe technique interne',
+    'vps_cloud': 'Oui — via VPS / cloud',
+    'non': 'Non',
+    'nsp': 'Je ne sais pas',
+  },
+  delaiModeration: {
+    'lt1h': 'Moins d\'1 heure',
+    'lt6h': 'Moins de 6 heures',
+    'lt24h': 'Moins de 24 heures',
+    'non_defini': 'Pas encore défini',
+  },
+  volumeSignalements: {
+    'lt100': 'Moins de 100',
+    '100-500': '100 à 500',
+    '500-2000': '500 à 2 000',
+    '2000+': 'Plus de 2 000',
+  },
+  frequenceRapports: {
+    'quotidien': 'Quotidien',
+    'hebdo': 'Hebdomadaire',
+    'par_election': 'Un rapport par scrutin',
+  },
+  echeanceOutil: {
+    'lt3mois': 'Dans moins de 3 mois',
+    'lt6mois': 'Dans moins de 6 mois',
+    'lt1an': 'Dans moins d\'1 an',
+    'pas_urgent': 'Pas urgent',
+  },
+  dispoTechCamp: {
+    'dakar': 'En présentiel à Dakar',
+    'en_ligne': 'En ligne uniquement',
+    'les_deux': 'Les deux',
+    'non': 'Pas disponible',
+  },
+}
+
 export const paysList = [
   'Sénégal', 'Côte d\'Ivoire', 'Mali', 'Burkina Faso', 'Niger',
   'Guinée', 'Bénin', 'Togo', 'Ghana', 'Nigéria', 'Cameroun',
