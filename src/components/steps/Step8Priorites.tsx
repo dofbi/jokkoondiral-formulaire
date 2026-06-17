@@ -1,9 +1,16 @@
+import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
 import { fonctionnalitesList } from '@/schemas/formulaire'
 
 export function Step8Priorites() {
-  const { register } = useFormContext()
+  const { register, setValue } = useFormContext()
+
+  useEffect(() => {
+    fonctionnalitesList.forEach((fonc, index) => {
+      setValue(`priorisations.${index}.fonctionnalite_id`, fonc.id)
+    })
+  }, [setValue])
 
   return (
     <div>
@@ -17,7 +24,6 @@ export function Step8Priorites() {
       <div className="space-y-4">
         {fonctionnalitesList.map((fonc, index) => (
           <div key={fonc.id} className="bg-gray-50 p-4 rounded-lg">
-            <input type="hidden" defaultValue={fonc.id} {...register(`priorisations.${index}.fonctionnalite_id` as const, { valueAsNumber: true })} />
             <div className="flex justify-between items-center mb-2">
               <span className="font-medium">{index + 1}. {fonc.nom}</span>
               <span className="text-xs text-gray-500 uppercase">{fonc.categorie}</span>

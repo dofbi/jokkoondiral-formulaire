@@ -127,12 +127,13 @@ export default function FormulaireWizard() {
         }
       }
 
-      // 5. Langues terrain liées à la réponse
+      // 5. Langues terrain liées à la réponse (priorité = position 1/2/3)
       if (langues_terrain) {
-        for (const lang of langues_terrain.filter(l => l.langue)) {
+        const languesFilled = langues_terrain.filter(l => l.langue)
+        for (let i = 0; i < languesFilled.length; i++) {
           await createRecord('msu6yxyfrbye0xg', {
-            langue: lang.langue,
-            priorite: lang.priorite,
+            langue: languesFilled[i].langue,
+            priorite: i + 1,
             reponse: [{ Id: reponseResult.Id }],
           })
         }
@@ -141,10 +142,8 @@ export default function FormulaireWizard() {
       // 6. Priorisations liées à la réponse et à la fonctionnalité
       if (priorisations) {
         for (const prio of priorisations) {
-          const fonctId = typeof prio.fonctionnalite_id === 'string'
-            ? parseInt(prio.fonctionnalite_id)
-            : prio.fonctionnalite_id
-          if (!fonctId) continue
+          const fonctId = Number(prio.fonctionnalite_id)
+          if (!fonctId || isNaN(fonctId)) continue
           await createRecord('mtf25mgvrzw82gu', {
             note: prio.note,
             non_negociable: prio.non_negociable ?? false,

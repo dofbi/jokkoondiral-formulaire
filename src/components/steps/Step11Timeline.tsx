@@ -54,19 +54,16 @@ export function Step11Timeline() {
             placeholder="Langue principale (ex : Wolof)"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
           />
-          <input type="hidden" value={1} {...register('langues_terrain.0.priorite', { valueAsNumber: true })} />
           <input
             {...register('langues_terrain.1.langue')}
             placeholder="2ème langue (ex : Pulaar)"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
           />
-          <input type="hidden" value={2} {...register('langues_terrain.1.priorite', { valueAsNumber: true })} />
           <input
             {...register('langues_terrain.2.langue')}
             placeholder="3ème langue (optionnel)"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
           />
-          <input type="hidden" value={3} {...register('langues_terrain.2.priorite', { valueAsNumber: true })} />
         </div>
       </FormField>
 
