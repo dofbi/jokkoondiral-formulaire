@@ -1,14 +1,17 @@
+import { useLocale } from '@/i18n/LocaleContext'
+
 interface ProgressBarProps {
   steps: string[]
   currentStep: number
 }
 
 export function ProgressBar({ steps, currentStep }: ProgressBarProps) {
+  const { dict } = useLocale()
   return (
     <div className="mb-8">
       <div className="flex justify-between mb-2">
         <span className="text-sm font-medium text-jokko-primary">
-          Étape {currentStep + 1}/{steps.length}
+          {dict.progress.stepLabel} {currentStep + 1}/{steps.length}
         </span>
         <span className="text-sm text-gray-500">
           {steps[currentStep]}

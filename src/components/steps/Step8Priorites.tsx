@@ -2,9 +2,12 @@ import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
 import { fonctionnalitesList } from '@/schemas/formulaire'
+import { useLocale } from '@/i18n/LocaleContext'
 
 export function Step8Priorites() {
   const { register, setValue } = useFormContext()
+  const { dict } = useLocale()
+  const s = dict.step8
 
   useEffect(() => {
     fonctionnalitesList.forEach((fonc, index) => {
@@ -15,21 +18,21 @@ export function Step8Priorites() {
   return (
     <div>
       <h2 className="text-2xl font-bold text-jokko-primary mb-6">
-        8. Priorités des fonctionnalités
+        {s.heading}
       </h2>
       <p className="text-gray-600 mb-6">
-        Notez chaque fonctionnalité de 1 (non utile) à 5 (critique MVP)
+        {s.subheading}
       </p>
 
       <div className="space-y-4">
         {fonctionnalitesList.map((fonc, index) => (
           <div key={fonc.id} className="bg-gray-50 p-4 rounded-lg">
             <div className="flex justify-between items-center mb-2">
-              <span className="font-medium">{index + 1}. {fonc.nom}</span>
+              <span className="font-medium">{index + 1}. {dict.options.fonctionnalites[fonc.id]}</span>
               <span className="text-xs text-gray-500 uppercase">{fonc.categorie}</span>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-500">Non utile</span>
+              <span className="text-sm text-gray-500">{s.nonUtile}</span>
               <div className="flex space-x-2">
                 {[1, 2, 3, 4, 5].map(note => (
                   <label key={note} className="cursor-pointer">
@@ -45,7 +48,7 @@ export function Step8Priorites() {
                   </label>
                 ))}
               </div>
-              <span className="text-sm">Critique</span>
+              <span className="text-sm">{s.critique}</span>
             </div>
             <label className="flex items-center mt-2 space-x-2">
               <input
@@ -53,7 +56,7 @@ export function Step8Priorites() {
                 {...register(`priorisations.${index}.non_negociable` as const)}
                 className="rounded text-jokko-primary focus:ring-jokko-primary"
               />
-              <span className="text-sm">Non-négociable (top 3)</span>
+              <span className="text-sm">{s.nonNegociable}</span>
             </label>
           </div>
         ))}

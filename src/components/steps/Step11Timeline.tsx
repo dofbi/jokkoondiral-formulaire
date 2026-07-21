@@ -1,67 +1,70 @@
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
-import { echeanceOutilList, dispoTechCampList, LABELS } from '@/schemas/formulaire'
+import { echeanceOutilList, dispoTechCampList } from '@/schemas/formulaire'
+import { useLocale } from '@/i18n/LocaleContext'
 
 export function Step11Timeline() {
   const { register } = useFormContext()
+  const { dict } = useLocale()
+  const s = dict.step11
 
   return (
     <div>
       <h2 className="text-2xl font-bold text-jokko-primary mb-2">
-        11. Prochaines élections &amp; disponibilité
+        {s.heading}
       </h2>
       <p className="text-gray-500 text-sm mb-6">
-        Ces informations nous aident à prioriser le développement et à planifier les sessions d'accompagnement avec votre organisation.
+        {s.subheading}
       </p>
 
       <FormField
         name="prochain_scrutin"
-        label="Prochain scrutin / processus électoral"
-        description="Quel est le prochain processus électoral pour lequel vous avez besoin de cet outil ? (ex : Élections législatives Sénégal, Novembre 2026)"
+        label={s.prochainScrutin.label}
+        description={s.prochainScrutin.description}
       >
         <input
           {...register('prochain_scrutin')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
-          placeholder="Type de scrutin et date approximative"
+          placeholder={s.prochainScrutin.placeholder}
         />
       </FormField>
 
       <FormField
         name="echeance_outil"
-        label="Échéance souhaitée pour disposer de l'outil"
-        description="Dans quel délai avez-vous besoin que la plateforme soit opérationnelle pour votre prochain déploiement ?"
+        label={s.echeanceOutil.label}
+        description={s.echeanceOutil.description}
         required
       >
         <select
           {...register('echeance_outil')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {echeanceOutilList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.echeanceOutil[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.echeanceOutil[opt]}</option>
           ))}
         </select>
       </FormField>
 
       <FormField
         name="langues_terrain"
-        label="Langues utilisées par vos observateurs terrain"
-        description="Listez les langues parlées par vos observateurs. Cela nous permettra de prioriser les traductions dans la plateforme. (ex : Wolof, Pulaar, Sérère, Bambara…)"
+        label={s.languesTerrain.label}
+        description={s.languesTerrain.description}
       >
         <div className="space-y-2">
           <input
             {...register('langues_terrain.0.langue')}
-            placeholder="Langue principale (ex : Wolof)"
+            placeholder={s.languesTerrain.placeholder1}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
           />
           <input
             {...register('langues_terrain.1.langue')}
-            placeholder="2ème langue (ex : Pulaar)"
+            placeholder={s.languesTerrain.placeholder2}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
           />
           <input
             {...register('langues_terrain.2.langue')}
-            placeholder="3ème langue (optionnel)"
+            placeholder={s.languesTerrain.placeholder3}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
           />
         </div>
@@ -69,31 +72,31 @@ export function Step11Timeline() {
 
       <FormField
         name="dispo_tech_camp"
-        label="Disponibilité pour le Tech Camp"
-        description="Un Tech Camp de formation et co-construction sera organisé avec les OSC participantes. Pouvez-vous y participer ?"
+        label={s.dispoTechCamp.label}
+        description={s.dispoTechCamp.description}
         required
       >
         <select
           {...register('dispo_tech_camp')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {dispoTechCampList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.dispoTechCamp[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.dispoTechCamp[opt]}</option>
           ))}
         </select>
       </FormField>
 
       <FormField
         name="remarques"
-        label="Remarques ou suggestions complémentaires"
-        description="Y a-t-il des besoins spécifiques à votre contexte national que nous n'avons pas couverts dans ce formulaire ?"
+        label={s.remarques.label}
+        description={s.remarques.description}
       >
         <textarea
           {...register('remarques')}
           rows={4}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
-          placeholder="Toute information complémentaire utile pour adapter la plateforme à votre contexte..."
+          placeholder={s.remarques.placeholder}
         />
       </FormField>
     </div>

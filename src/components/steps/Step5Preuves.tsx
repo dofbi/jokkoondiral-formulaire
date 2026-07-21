@@ -1,23 +1,26 @@
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
-import { typesPreuvesList, alternativeVideoList, horodatageList, LABELS } from '@/schemas/formulaire'
+import { typesPreuvesList, alternativeVideoList, horodatageList } from '@/schemas/formulaire'
+import { useLocale } from '@/i18n/LocaleContext'
 
 export function Step5Preuves() {
   const { register } = useFormContext()
+  const { dict } = useLocale()
+  const s = dict.step5
 
   return (
     <div>
       <h2 className="text-2xl font-bold text-jokko-primary mb-2">
-        5. Types de preuves &amp; pièces jointes
+        {s.heading}
       </h2>
       <p className="text-gray-500 text-sm mb-6">
-        Quels types de preuves vos observateurs peuvent-ils collecter et joindre à leurs signalements ?
+        {s.subheading}
       </p>
 
       <FormField
         name="types_preuves"
-        label="Types de preuves collectées"
-        description="Sélectionnez tous les types de preuves que vos observateurs peuvent collecter sur le terrain (selon leurs appareils disponibles)."
+        label={s.typesPreuves.label}
+        description={s.typesPreuves.description}
         required
       >
         <div className="space-y-2">
@@ -29,7 +32,7 @@ export function Step5Preuves() {
                 {...register('types_preuves')}
                 className="rounded text-jokko-primary focus:ring-jokko-primary"
               />
-              <span className="text-sm">{type}</span>
+              <span className="text-sm">{dict.options.typesPreuves[type]}</span>
             </label>
           ))}
         </div>
@@ -37,34 +40,34 @@ export function Step5Preuves() {
 
       <FormField
         name="alternative_video"
-        label="Alternative si vidéo impossible"
-        description="Si l'envoi de vidéo est impossible (connexion trop lente ou stockage insuffisant), quelle est la meilleure alternative pour documenter un incident ?"
+        label={s.alternativeVideo.label}
+        description={s.alternativeVideo.description}
         required
       >
         <select
           {...register('alternative_video')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {alternativeVideoList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.alternativeVideo[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.alternativeVideo[opt]}</option>
           ))}
         </select>
       </FormField>
 
       <FormField
         name="horodatage"
-        label="Horodatage automatique"
-        description="L'horodatage automatique enregistre la date et l'heure exactes de la saisie, garantissant l'authenticité du signalement."
+        label={s.horodatage.label}
+        description={s.horodatage.description}
         required
       >
         <select
           {...register('horodatage')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {horodatageList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.horodatage[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.horodatage[opt]}</option>
           ))}
         </select>
       </FormField>

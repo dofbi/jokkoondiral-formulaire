@@ -1,23 +1,26 @@
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
-import { canauxSignalementList, modeOfflineList, frequenceSignalementList, LABELS } from '@/schemas/formulaire'
+import { canauxSignalementList, modeOfflineList, frequenceSignalementList } from '@/schemas/formulaire'
+import { useLocale } from '@/i18n/LocaleContext'
 
 export function Step4Canaux() {
   const { register } = useFormContext()
+  const { dict } = useLocale()
+  const s = dict.step4
 
   return (
     <div>
       <h2 className="text-2xl font-bold text-jokko-primary mb-2">
-        4. Remontée des données terrain
+        {s.heading}
       </h2>
       <p className="text-gray-500 text-sm mb-6">
-        Comment vos observateurs envoient-ils leurs signalements depuis le terrain ? Pensez aux contraintes de connectivité et aux appareils disponibles.
+        {s.subheading}
       </p>
 
       <FormField
         name="canaux_signalement"
-        label="Canaux de signalement utilisés par vos observateurs"
-        description="Sélectionnez tous les canaux que vos observateurs pourraient utiliser pour remonter un incident."
+        label={s.canauxSignalement.label}
+        description={s.canauxSignalement.description}
         required
       >
         <div className="space-y-2">
@@ -29,7 +32,7 @@ export function Step4Canaux() {
                 {...register('canaux_signalement')}
                 className="rounded text-jokko-primary focus:ring-jokko-primary"
               />
-              <span className="text-sm">{canal}</span>
+              <span className="text-sm">{dict.options.canauxSignalement[canal]}</span>
             </label>
           ))}
         </div>
@@ -37,34 +40,34 @@ export function Step4Canaux() {
 
       <FormField
         name="mode_offline"
-        label="Mode hors-ligne nécessaire"
-        description="L'accès à internet peut être coupé le jour du scrutin. Un mode hors-ligne permet de continuer à saisir des données et de les synchroniser dès que la connexion revient."
+        label={s.modeOffline.label}
+        description={s.modeOffline.description}
         required
       >
         <select
           {...register('mode_offline')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {modeOfflineList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.modeOffline[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.modeOffline[opt]}</option>
           ))}
         </select>
       </FormField>
 
       <FormField
         name="frequence_signalement"
-        label="Fréquence des signalements"
-        description="À quelle fréquence vos observateurs envoient-ils des signalements pendant une journée d'élection ?"
+        label={s.frequenceSignalement.label}
+        description={s.frequenceSignalement.description}
         required
       >
         <select
           {...register('frequence_signalement')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {frequenceSignalementList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.frequenceSignalement[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.frequenceSignalement[opt]}</option>
           ))}
         </select>
       </FormField>

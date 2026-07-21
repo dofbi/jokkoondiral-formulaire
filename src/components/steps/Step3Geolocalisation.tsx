@@ -1,40 +1,43 @@
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
-import { geoTypeList, niveauGeoList, visualisationsCartoList, LABELS } from '@/schemas/formulaire'
+import { geoTypeList, niveauGeoList, visualisationsCartoList } from '@/schemas/formulaire'
+import { useLocale } from '@/i18n/LocaleContext'
 
 export function Step3Geolocalisation() {
   const { register } = useFormContext()
+  const { dict } = useLocale()
+  const s = dict.step3
 
   return (
     <div>
       <h2 className="text-2xl font-bold text-jokko-primary mb-2">
-        3. Géolocalisation &amp; cartographie
+        {s.heading}
       </h2>
       <p className="text-gray-500 text-sm mb-6">
-        La géolocalisation permet de situer chaque incident sur une carte et de visualiser les zones à risque en temps réel.
+        {s.subheading}
       </p>
 
       <FormField
         name="geo_type"
-        label="Géolocalisation des incidents"
-        description="Souhaitez-vous que la position géographique d'un incident soit détectée automatiquement via GPS, saisie manuellement par l'observateur, ou non nécessaire ?"
+        label={s.geoType.label}
+        description={s.geoType.description}
         required
       >
         <select
           {...register('geo_type')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {geoTypeList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.geoType[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.geoType[opt]}</option>
           ))}
         </select>
       </FormField>
 
       <FormField
         name="visualisations_carto"
-        label="Types de visualisation cartographique souhaités"
-        description="Sélectionnez tous les types de cartes utiles pour votre organisation."
+        label={s.visualisationsCarto.label}
+        description={s.visualisationsCarto.description}
       >
         <div className="space-y-2">
           {visualisationsCartoList.map(type => (
@@ -45,7 +48,7 @@ export function Step3Geolocalisation() {
                 {...register('visualisations_carto')}
                 className="rounded text-jokko-primary focus:ring-jokko-primary"
               />
-              <span className="text-sm">{type}</span>
+              <span className="text-sm">{dict.options.visualisationsCarto[type]}</span>
             </label>
           ))}
         </div>
@@ -53,17 +56,17 @@ export function Step3Geolocalisation() {
 
       <FormField
         name="niveau_geo"
-        label="Niveau géographique le plus fin nécessaire"
-        description="Quel est le niveau de précision géographique minimum dont vous avez besoin pour analyser et afficher les données ?"
+        label={s.niveauGeo.label}
+        description={s.niveauGeo.description}
         required
       >
         <select
           {...register('niveau_geo')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {niveauGeoList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.niveauGeo[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.niveauGeo[opt]}</option>
           ))}
         </select>
       </FormField>

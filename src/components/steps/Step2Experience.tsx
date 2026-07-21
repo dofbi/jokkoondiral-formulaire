@@ -1,72 +1,75 @@
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
-import { experienceAnneesList, nbObservateursList, outilsList, usageList, LABELS } from '@/schemas/formulaire'
+import { experienceAnneesList, nbObservateursList, outilsList, usageList } from '@/schemas/formulaire'
+import { useLocale } from '@/i18n/LocaleContext'
 
 export function Step2Experience() {
   const { register } = useFormContext()
+  const { dict } = useLocale()
+  const s = dict.step2
 
   return (
     <div>
       <h2 className="text-2xl font-bold text-jokko-primary mb-2">
-        2. Expérience &amp; outils actuels
+        {s.heading}
       </h2>
       <p className="text-gray-500 text-sm mb-6">
-        Ces informations nous aident à adapter la plateforme à votre niveau d'expérience et aux outils que vous utilisez déjà.
+        {s.subheading}
       </p>
 
       <FormField
         name="experience_annees"
-        label="Expérience en déploiement d'observateurs électoraux"
-        description="Depuis combien d'années votre organisation déploie-t-elle des observateurs lors d'élections ?"
+        label={s.experienceAnnees.label}
+        description={s.experienceAnnees.description}
         required
       >
         <select
           {...register('experience_annees')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {experienceAnneesList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.experienceAnnees[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.experienceAnnees[opt]}</option>
           ))}
         </select>
       </FormField>
 
       <FormField
         name="nb_observateurs"
-        label="Nombre d'observateurs mobilisés lors d'une élection"
-        description="Estimation du nombre total d'observateurs terrain que vous déployez lors d'un scrutin."
+        label={s.nbObservateurs.label}
+        description={s.nbObservateurs.description}
         required
       >
         <select
           {...register('nb_observateurs')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {nbObservateursList.map(opt => (
-            <option key={opt} value={opt}>{opt} observateurs</option>
+            <option key={opt} value={opt}>{opt} {s.nbObservateurs.suffix}</option>
           ))}
         </select>
       </FormField>
 
       <FormField
         name="outils_actuels"
-        label="Outils numériques actuellement utilisés"
-        description="Pour chaque outil, indiquez s'il est votre outil principal, utilisé occasionnellement, ou jamais utilisé par votre organisation."
+        label={s.outilsActuels.label}
+        description={s.outilsActuels.description}
       >
         <div className="overflow-x-auto">
           <table className="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-jokko-light">
-                <th className="text-left py-2 px-3 font-medium text-gray-700">Outil</th>
-                <th className="py-2 px-3 font-medium text-gray-700">Principal</th>
-                <th className="py-2 px-3 font-medium text-gray-700">Occasionnel</th>
-                <th className="py-2 px-3 font-medium text-gray-700">Jamais</th>
+                <th className="text-left py-2 px-3 font-medium text-gray-700">{s.outilsActuels.colOutil}</th>
+                <th className="py-2 px-3 font-medium text-gray-700">{s.outilsActuels.colPrincipal}</th>
+                <th className="py-2 px-3 font-medium text-gray-700">{s.outilsActuels.colOccasionnel}</th>
+                <th className="py-2 px-3 font-medium text-gray-700">{s.outilsActuels.colJamais}</th>
               </tr>
             </thead>
             <tbody>
               {outilsList.map((outil, i) => (
                 <tr key={outil} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <td className="py-2 px-3 font-medium">{outil}</td>
+                  <td className="py-2 px-3 font-medium">{dict.options.outils[outil]}</td>
                   {usageList.map(usage => (
                     <td key={usage} className="py-2 px-3 text-center">
                       <input
@@ -87,14 +90,14 @@ export function Step2Experience() {
 
       <FormField
         name="problemes_top3"
-        label="Top 3 des problèmes avec vos outils actuels"
-        description="Quels sont vos 3 principaux problèmes ? (ex : données dispersées, pas de cartographie, pas de vérification, mauvaise connectivité, trop complexe, pas sécurisé…)"
+        label={s.problemesTop3.label}
+        description={s.problemesTop3.description}
       >
         <textarea
           {...register('problemes_top3')}
           rows={3}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
-          placeholder="1. …&#10;2. …&#10;3. …"
+          placeholder={s.problemesTop3.placeholder}
         />
       </FormField>
     </div>

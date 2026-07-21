@@ -1,132 +1,64 @@
 import { z } from 'zod'
 
-// Label maps: valeur interne → libellé affiché
-export const LABELS = {
-  experienceAnnees: {
-    '0': 'Non — première fois',
-    '1-2': '1 à 2 ans',
-    '3-4': '3 à 4 ans',
-    '5+': '5 ans et plus',
-  },
-  geoType: {
-    'auto': 'Oui — géolocalisation automatique',
-    'manuelle': 'Oui — saisie manuelle de la position',
-    'non': 'Non, pas nécessaire',
-    'nsp': 'Je ne sais pas',
-  },
-  niveauGeo: {
-    'bureau_vote': 'Bureau de vote',
-    'commune': 'Commune',
-    'departement': 'Département',
-    'region': 'Région',
-    'national': 'National',
-  },
-  modeOffline: {
-    'critique': 'Oui — critique (zones sans connexion)',
-    'secondaire': 'Oui — secondaire (utile mais pas bloquant)',
-    'non': 'Non',
-    'nsp': 'Je ne sais pas',
-  },
-  frequenceSignalement: {
-    'continu': 'En continu (flux temps réel)',
-    'quelques_heure': 'Quelques fois par heure',
-    'quelques_jour': 'Quelques fois par jour',
-    'une_fois': 'Une fois par session / tour',
-  },
-  alternativeVideo: {
-    'audio_photo': 'Audio + photo',
-    'photo_texte': 'Photo + description texte',
-    'formulaire': 'Formulaire structuré',
-    'video_indispensable': 'La vidéo est indispensable',
-    'sans_objet': 'Sans objet pour nous',
-  },
-  horodatage: {
-    'obligatoire': 'Oui — obligatoire et non modifiable',
-    'modifiable': 'Oui — mais modifiable par l\'observateur',
-    'non': 'Non, pas nécessaire',
-  },
-  canalCoordinateurs: {
-    'smartphone': 'Smartphone uniquement',
-    'ordinateur': 'Ordinateur uniquement',
-    'les_deux': 'Les deux',
-    'nsp': 'Je ne sais pas',
-  },
-  qualiteConnexion: {
-    'bonne': 'Bonne (4G/fibre disponible)',
-    'variable': 'Variable selon les zones',
-    'faible': 'Faible (2G/3G instable)',
-    'tres_faible': 'Très faible (SMS seulement)',
-  },
-  coutServeur: {
-    'lt10eur': 'Moins de 10 €/mois',
-    'lt30eur': 'Moins de 30 €/mois',
-    'non_contraint': 'Pas de contrainte de coût',
-    'nsp': 'Je ne sais pas',
-  },
-  prioriteControle: {
-    'critique_auto': 'Critique — auto-hébergement obligatoire',
-    'important': 'Important — préférons contrôler nos données',
-    'neutre': 'Neutre — cloud tiers acceptable',
-  },
-  capaciteHebergement: {
-    'equipe_interne': 'Oui — équipe technique interne',
-    'vps_cloud': 'Oui — via VPS / cloud',
-    'non': 'Non',
-    'nsp': 'Je ne sais pas',
-  },
-  delaiModeration: {
-    'lt1h': 'Moins d\'1 heure',
-    'lt6h': 'Moins de 6 heures',
-    'lt24h': 'Moins de 24 heures',
-    'non_defini': 'Pas encore défini',
-  },
-  volumeSignalements: {
-    'lt100': 'Moins de 100',
-    '100-500': '100 à 500',
-    '500-2000': '500 à 2 000',
-    '2000+': 'Plus de 2 000',
-  },
-  frequenceRapports: {
-    'quotidien': 'Quotidien',
-    'hebdo': 'Hebdomadaire',
-    'par_election': 'Un rapport par scrutin',
-  },
-  echeanceOutil: {
-    'lt3mois': 'Dans moins de 3 mois',
-    'lt6mois': 'Dans moins de 6 mois',
-    'lt1an': 'Dans moins d\'1 an',
-    'pas_urgent': 'Pas urgent',
-  },
-  dispoTechCamp: {
-    'dakar': 'En présentiel à Dakar',
-    'en_ligne': 'En ligne uniquement',
-    'les_deux': 'Les deux',
-    'non': 'Pas disponible',
-  },
-}
+// Libellés affichés (FR/EN) : src/i18n/dictionaries/{fr,en}.ts → dict.options.*
+// Les listes ci-dessous ne contiennent que les clés stables — jamais de texte
+// affiché — pour que la valeur soumise à NocoDB reste indépendante de la
+// langue active dans l'UI.
 
+// Les 15 premiers sont seedés dans NocoDB depuis le 2026-06-17 (IDs 1-16, cf PAYS_IDS).
+// Les 39 suivants (issue #3) doivent être seedés via scripts/seed-pays.mjs avant
+// d'ajouter leurs IDs ci-dessous — voir le commentaire sur PAYS_IDS.
 export const paysList = [
-  'Sénégal', 'Côte d\'Ivoire', 'Mali', 'Burkina Faso', 'Niger',
-  'Guinée', 'Bénin', 'Togo', 'Ghana', 'Nigéria', 'Cameroun',
-  'Tchad', 'RDC', 'Gabon', 'République Centrafricaine', 'Autre'
+  'senegal', 'cote_ivoire', 'mali', 'burkina_faso', 'niger',
+  'guinee', 'benin', 'togo', 'ghana', 'nigeria', 'cameroun',
+  'tchad', 'rdc', 'gabon', 'republique_centrafricaine',
+  'algerie', 'angola', 'botswana', 'burundi', 'cap_vert', 'comores',
+  'congo_brazzaville', 'djibouti', 'egypte', 'guinee_equatoriale',
+  'erythree', 'eswatini', 'ethiopie', 'gambie', 'guinee_bissau', 'kenya',
+  'lesotho', 'liberia', 'libye', 'madagascar', 'malawi', 'maroc',
+  'maurice', 'mauritanie', 'mozambique', 'namibie', 'ouganda', 'rwanda',
+  'sao_tome', 'seychelles', 'sierra_leone', 'somalie', 'soudan',
+  'soudan_sud', 'tanzanie', 'tunisie', 'zambie', 'zimbabwe',
+  'afrique_sud', 'autre'
 ] as const
 
-// IDs NocoDB table pays — ordre identique à paysList (seedé le 2026-06-17)
+// IDs NocoDB table pays (mxvhaff41wxm7ai), clés par slug (indépendant de la
+// langue affichée). Les 16 premiers sont seedés (2026-06-17). Les entrées
+// ajoutées pour l'issue #3 (54 pays) ne sont PAS encore dans PAYS_IDS :
+// exécuter scripts/seed-pays.mjs (nécessite NOCODB_TOKEN) puis compléter cette
+// map avec les IDs retournés — voir plan snoopy-waddling-clock.md. Tant que ce
+// n'est pas fait, sélectionner un pays hors de cette liste de 16 soumet le
+// formulaire sans lien `pays` (FormulaireWizard.tsx ignore silencieusement un
+// lookup manquant).
 export const PAYS_IDS: Record<string, number> = {
-  'Sénégal': 1, 'Côte d\'Ivoire': 2, 'Mali': 3, 'Burkina Faso': 4, 'Niger': 5,
-  'Guinée': 6, 'Bénin': 7, 'Togo': 8, 'Ghana': 9, 'Nigéria': 10, 'Cameroun': 11,
-  'Tchad': 12, 'RDC': 13, 'Gabon': 14, 'République Centrafricaine': 15, 'Autre': 16,
+  senegal: 1, cote_ivoire: 2, mali: 3, burkina_faso: 4, niger: 5,
+  guinee: 6, benin: 7, togo: 8, ghana: 9, nigeria: 10, cameroun: 11,
+  tchad: 12, rdc: 13, gabon: 14, republique_centrafricaine: 15, autre: 16,
 }
 
 export const typeOrgList = [
-  'OSC nationale',
-  'Média citoyen',
-  'Civic tech',
-  'Situation Room',
-  'Org jeunesse',
-  'Mouvement jeunes',
-  'Autre'
+  'osc_nationale',
+  'media_citoyen',
+  'civic_tech',
+  'situation_room',
+  'org_jeunesse',
+  'mouvement_jeunes',
+  'autre'
 ] as const
+
+// organisations.type_org est un champ NocoDB MultiSelect à options fixes —
+// contrairement aux listes stockées en LongText/JSON, il rejette toute
+// valeur hors de cette liste. La valeur soumise doit donc rester ce texte
+// canonique (déjà configuré côté NocoDB) quelle que soit la langue affichée.
+export const TYPE_ORG_NOCODB: Record<string, string> = {
+  osc_nationale: 'OSC nationale',
+  media_citoyen: 'Média citoyen',
+  civic_tech: 'Civic tech',
+  situation_room: 'Situation Room',
+  org_jeunesse: 'Org jeunesse',
+  mouvement_jeunes: 'Mouvement jeunes',
+  autre: 'Autre',
+}
 
 export const experienceAnneesList = [
   '0', '1-2', '3-4', '5+'
@@ -201,78 +133,96 @@ export const dispoTechCampList = [
 ] as const
 
 export const outilsList = [
-  'WhatsApp', 'SMS', 'Telegram', 'Ushahidi',
-  'KoBoToolbox', 'Google Sheets', 'App maison', 'Aucun', 'Autre'
+  'whatsapp', 'sms', 'telegram', 'ushahidi',
+  'kobotoolbox', 'google_sheets', 'app_maison', 'aucun', 'autre'
 ] as const
+
+// outils_actuels.outil est un champ NocoDB SingleSelect à options fixes —
+// même contrainte que TYPE_ORG_NOCODB ci-dessus.
+export const OUTILS_NOCODB: Record<string, string> = {
+  whatsapp: 'WhatsApp',
+  sms: 'SMS',
+  telegram: 'Telegram',
+  ushahidi: 'Ushahidi',
+  kobotoolbox: 'KoBoToolbox',
+  google_sheets: 'Google Sheets',
+  app_maison: 'App maison',
+  aucun: 'Aucun',
+  autre: 'Autre',
+}
 
 export const usageList = [
   'principal', 'occasionnel', 'jamais'
 ] as const
 
 export const menacesList = [
-  'Piratage', 'Coupures internet', 'Désinformation',
-  'Intimidation/arrestation', 'Surveillance', 'Aucune'
+  'piratage', 'coupures_internet', 'desinformation',
+  'intimidation_arrestation', 'surveillance', 'aucune'
 ] as const
 
 export const appareilsList = [
-  'Android bas de gamme', 'Android milieu/haut',
-  'iPhone', 'Téléphones basiques'
+  'android_bas_gamme', 'android_milieu_haut',
+  'iphone', 'telephones_basiques'
 ] as const
 
 export const typesAlertesList = [
-  'Push mobile', 'SMS sortant', 'Email',
-  'Dashboard badge/son', 'WhatsApp/Telegram', 'Pas d\'alertes'
+  'push_mobile', 'sms_sortant', 'email',
+  'dashboard_badge_son', 'whatsapp_telegram', 'pas_alertes'
 ] as const
 
 export const evenementsAlertesList = [
-  'Incident critique', 'Cluster géographique',
-  'Signalement avec preuve', 'Modération en attente',
-  'Seuil incidents dépassé', 'Tentative intrusion'
+  'incident_critique', 'cluster_geographique',
+  'signalement_preuve', 'moderation_attente',
+  'seuil_incidents_depasse', 'tentative_intrusion'
 ] as const
 
 export const typesPreuvesList = [
-  'Texte', 'Photo', 'Audio', 'Vidéo',
-  'Document scanné', 'GPS seul', 'Témoignage structuré'
+  'texte', 'photo', 'audio', 'video',
+  'document_scanne', 'gps_seul', 'temoignage_structure'
 ] as const
 
 export const visualisationsCartoList = [
-  'Carte incidents temps réel', 'Heatmap densité',
-  'Carte par circo/bureau', 'Carte filtrable',
-  'Carte publique', 'Carte interne', 'Dashboard stats'
+  'carte_incidents_temps_reel', 'heatmap_densite',
+  'carte_circo_bureau', 'carte_filtrable',
+  'carte_publique', 'carte_interne', 'dashboard_stats'
 ] as const
 
 export const canauxSignalementList = [
-  'WhatsApp', 'Telegram', 'SMS', 'Formulaire web',
-  'App mobile Android', 'Email', 'USSD', 'Appel téléphonique'
+  'whatsapp', 'telegram', 'sms', 'formulaire_web',
+  'app_mobile_android', 'email', 'ussd', 'appel_telephonique'
 ] as const
 
+// `nom` affiché vient de dict.options.fonctionnalites[id] (fr.ts/en.ts) — seul
+// `id` est soumis à NocoDB (fonctionnalite_id), donc cette liste ne porte plus
+// de texte affiché, uniquement l'id stable et la catégorie (badge technique,
+// non traduit).
 export const fonctionnalitesList = [
-  { id: 1, nom: 'Signalement multi-canal', categorie: 'multi_canal' },
-  { id: 2, nom: 'Géolocalisation automatique', categorie: 'geo' },
-  { id: 3, nom: 'Carte interactive publique', categorie: 'carte' },
-  { id: 4, nom: 'Espace modération privé', categorie: 'moderation' },
-  { id: 5, nom: 'Formulaire web observateurs', categorie: 'formulaire' },
-  { id: 6, nom: 'Support preuves texte/photo/audio', categorie: 'preuves' },
-  { id: 7, nom: 'Mode hors-ligne', categorie: 'offline' },
-  { id: 8, nom: 'Alertes temps réel', categorie: 'alertes' },
-  { id: 9, nom: 'Dashboard statistiques', categorie: 'dashboard' },
-  { id: 10, nom: 'Export données', categorie: 'export' },
-  { id: 11, nom: 'Multilingue', categorie: 'multilingual' },
-  { id: 12, nom: 'Support USSD/SMS', categorie: 'ussd' },
-  { id: 13, nom: 'App mobile Android', categorie: 'app_mobile' },
-  { id: 14, nom: 'Adaptabilité autres contextes', categorie: 'adaptabilite' },
-  { id: 15, nom: 'Multi-organisations', categorie: 'multi_org' },
-  { id: 16, nom: 'Sécurité renforcée', categorie: 'securite' },
+  { id: 1, categorie: 'multi_canal' },
+  { id: 2, categorie: 'geo' },
+  { id: 3, categorie: 'carte' },
+  { id: 4, categorie: 'moderation' },
+  { id: 5, categorie: 'formulaire' },
+  { id: 6, categorie: 'preuves' },
+  { id: 7, categorie: 'offline' },
+  { id: 8, categorie: 'alertes' },
+  { id: 9, categorie: 'dashboard' },
+  { id: 10, categorie: 'export' },
+  { id: 11, categorie: 'multilingual' },
+  { id: 12, categorie: 'ussd' },
+  { id: 13, categorie: 'app_mobile' },
+  { id: 14, categorie: 'adaptabilite' },
+  { id: 15, categorie: 'multi_org' },
+  { id: 16, categorie: 'securite' },
 ] as const
 
 export const formulaireSchema = z.object({
   // Section 1: Organisation
-  nom_organisation: z.string().min(2, 'Nom requis'),
+  nom_organisation: z.string().min(2, 'nom_requis'),
   pays: z.enum(paysList),
-  nom_repondant: z.string().min(2, 'Nom requis'),
+  nom_repondant: z.string().min(2, 'nom_requis'),
   role_repondant: z.string().optional(),
-  email_contact: z.string().email('Email invalide'),
-  type_organisation: z.array(z.enum(typeOrgList)).min(1, 'Sélectionnez au moins un type'),
+  email_contact: z.string().email('email_invalide'),
+  type_organisation: z.array(z.enum(typeOrgList)).min(1, 'selectionnez_type'),
 
   // Section 2: Expérience
   experience_annees: z.enum(experienceAnneesList),
@@ -292,12 +242,12 @@ export const formulaireSchema = z.object({
   niveau_geo: z.enum(niveauGeoList),
 
   // Section 4: Canaux
-  canaux_signalement: z.array(z.enum(canauxSignalementList)).min(1, 'Sélectionnez au moins un canal'),
+  canaux_signalement: z.array(z.enum(canauxSignalementList)).min(1, 'selectionnez_canal'),
   mode_offline: z.enum(modeOfflineList),
   frequence_signalement: z.enum(frequenceSignalementList),
 
   // Section 5: Preuves
-  types_preuves: z.array(z.enum(typesPreuvesList)).min(1, 'Sélectionnez au moins un type'),
+  types_preuves: z.array(z.enum(typesPreuvesList)).min(1, 'selectionnez_type'),
   alternative_video: z.enum(alternativeVideoList),
   horodatage: z.enum(horodatageList),
 
@@ -308,7 +258,7 @@ export const formulaireSchema = z.object({
 
   // Section 7: Performance
   qualite_connexion: z.enum(qualiteConnexionList),
-  appareils: z.array(z.enum(appareilsList)).min(1, 'Sélectionnez au moins un appareil'),
+  appareils: z.array(z.enum(appareilsList)).min(1, 'selectionnez_appareil'),
   importance_legerete: z.number().min(1).max(5),
   cout_serveur_max: z.enum(coutServeurList),
 
@@ -340,7 +290,7 @@ export const formulaireSchema = z.object({
   fonctionnalites_non_negociables: z.string().optional(),
 
   // Section 10: Outil idéal
-  outil_ideal: z.string().min(10, 'Description requise'),
+  outil_ideal: z.string().min(10, 'description_requise'),
   besoins_critiques: z.string().optional(),
   contraintes_nationales: z.string().optional(),
 
@@ -353,7 +303,7 @@ export const formulaireSchema = z.object({
   // Langues terrain
   langues_terrain: z.array(z.object({
     langue: z.string(),
-    priorite: z.number().min(1).max(3),
+    priorite: z.number().min(1).max(3).optional(),
   })).optional(),
 })
 

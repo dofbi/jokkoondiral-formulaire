@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formulaireSchema, type FormulaireData, PAYS_IDS } from '@/schemas/formulaire'
+import { formulaireSchema, type FormulaireData, PAYS_IDS, TYPE_ORG_NOCODB, OUTILS_NOCODB } from '@/schemas/formulaire'
+import { useLocale } from '@/i18n/LocaleContext'
 import { ProgressBar } from './ProgressBar'
 import { Step1Organisation } from './steps/Step1Organisation'
 import { Step2Experience } from './steps/Step2Experience'
@@ -18,21 +19,9 @@ import { Step10OutilIdeal } from './steps/Step10OutilIdeal'
 import { Step11Timeline } from './steps/Step11Timeline'
 import { createRecord } from '@/lib/nocodb'
 
-const steps = [
-  'Organisation',
-  'Expérience',
-  'Géolocalisation',
-  'Canaux',
-  'Preuves',
-  'Alertes',
-  'Performance',
-  'Priorités',
-  'Sécurité',
-  'Outil idéal',
-  'Timeline',
-]
-
 export default function FormulaireWizard() {
+  const { dict } = useLocale()
+  const steps = dict.wizard.steps
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
@@ -43,6 +32,14 @@ export default function FormulaireWizard() {
     mode: 'onBlur',
     defaultValues: {
       priorisations: [],
+      // Same bug class as issues #1/#2: without an explicit [] default, a
+      // checkbox-array field with zero boxes checked stays `false` in RHF
+      // instead of an empty array, which fails Zod's array type check even
+      // for .optional() fields — see the langues_terrain fix above.
+      visualisations_carto: [],
+      types_alertes: [],
+      evenements_alertes: [],
+      menaces: [],
     },
   })
 
@@ -53,7 +50,7 @@ export default function FormulaireWizard() {
 
   const validateStep = async () => {
     const stepFields = getStepFields(currentStep)
-    const isValid = await trigger(stepFields as any)
+    const isValid = await trigger(stepFields)
     return isValid
   }
 
@@ -85,7 +82,7 @@ export default function FormulaireWizard() {
         nom: data.nom_organisation,
         pays: paysId ? [{ Id: paysId }] : undefined,
         type_org: Array.isArray(data.type_organisation)
-          ? data.type_organisation.join(',')
+          ? data.type_organisation.map(key => TYPE_ORG_NOCODB[key] ?? key).join(',')
           : data.type_organisation,
         nom_repondant: data.nom_repondant,
         role_repondant: data.role_repondant,
@@ -120,7 +117,7 @@ export default function FormulaireWizard() {
       if (outils_actuels) {
         for (const outil of outils_actuels) {
           await createRecord('ml9hjjzm1aoredu', {
-            outil: outil.outil,
+            outil: OUTILS_NOCODB[outil.outil] ?? outil.outil,
             usage: outil.usage,
             reponse: [{ Id: reponseResult.Id }],
           })
@@ -156,7 +153,7 @@ export default function FormulaireWizard() {
       setSubmitSuccess(true)
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error)
-      setSubmitError(`Erreur lors de l'envoi : ${msg}`)
+      setSubmitError(`${dict.wizard.submitErrorPrefix} : ${msg}`)
       console.error('Submit error:', error)
     } finally {
       setIsSubmitting(false)
@@ -168,10 +165,10 @@ export default function FormulaireWizard() {
       <div className="max-w-2xl mx-auto p-8 text-center">
         <div className="bg-green-50 border border-green-200 rounded-lg p-6">
           <h2 className="text-2xl font-bold text-green-800 mb-4">
-            ✅ Formulaire envoyé avec succès !
+            {dict.wizard.successTitle}
           </h2>
           <p className="text-green-700">
-            Merci pour votre participation. Votre réponse a été enregistrée.
+            {dict.wizard.successBody}
           </p>
         </div>
       </div>
@@ -189,7 +186,7 @@ export default function FormulaireWizard() {
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit, (errors) => {
               const fields = Object.keys(errors).join(', ')
-              setSubmitError(`Certains champs obligatoires sont manquants. Vérifiez les étapes précédentes. (${fields})`)
+              setSubmitError(`${dict.wizard.missingFieldsPrefix} (${fields})`)
             })}>
             <div className="mt-8">
               {currentStep === 0 && <Step1Organisation />}
@@ -218,7 +215,7 @@ export default function FormulaireWizard() {
                 disabled={currentStep === 0}
                 className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                ← Précédent
+                {dict.wizard.prev}
               </button>
 
               {currentStep < steps.length - 1 ? (
@@ -227,7 +224,7 @@ export default function FormulaireWizard() {
                   onClick={nextStep}
                   className="px-6 py-3 bg-jokko-primary text-white rounded-lg hover:bg-jokko-secondary"
                 >
-                  Suivant →
+                  {dict.wizard.next}
                 </button>
               ) : (
                 <button
@@ -235,7 +232,7 @@ export default function FormulaireWizard() {
                   disabled={isSubmitting}
                   className="px-6 py-3 bg-jokko-primary text-white rounded-lg hover:bg-jokko-secondary disabled:opacity-50"
                 >
-                  {isSubmitting ? 'Envoi en cours...' : 'Envoyer le formulaire'}
+                  {isSubmitting ? dict.wizard.submitting : dict.wizard.submit}
                 </button>
               )}
             </div>
@@ -246,7 +243,9 @@ export default function FormulaireWizard() {
   )
 }
 
-function getStepFields(step: number): string[] {
+// Keep in sync with the fields actually rendered in the corresponding Step*.tsx —
+// a field present in the Zod schema but missing here only fails at final submit.
+function getStepFields(step: number): (keyof FormulaireData)[] {
   switch (step) {
     case 0: return ['nom_organisation', 'pays', 'nom_repondant', 'email_contact', 'type_organisation']
     case 1: return ['experience_annees', 'nb_observateurs']
@@ -258,7 +257,7 @@ function getStepFields(step: number): string[] {
     case 7: return [] // Priorisations optionnelles
     case 8: return ['priorite_controle', 'capacite_hebergement']
     case 9: return ['outil_ideal']
-    case 10: return ['echeance_outil', 'dispo_tech_camp']
+    case 10: return ['echeance_outil', 'dispo_tech_camp', 'langues_terrain']
     default: return []
   }
 }

@@ -1,23 +1,26 @@
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
-import { typesAlertesList, evenementsAlertesList, canalCoordinateursList, LABELS } from '@/schemas/formulaire'
+import { typesAlertesList, evenementsAlertesList, canalCoordinateursList } from '@/schemas/formulaire'
+import { useLocale } from '@/i18n/LocaleContext'
 
 export function Step6Alertes() {
   const { register } = useFormContext()
+  const { dict } = useLocale()
+  const s = dict.step6
 
   return (
     <div>
       <h2 className="text-2xl font-bold text-jokko-primary mb-2">
-        6. Alertes &amp; notifications
+        {s.heading}
       </h2>
       <p className="text-gray-500 text-sm mb-6">
-        Un système d'alertes permet à vos coordinateurs d'être informés immédiatement des incidents critiques sans avoir à surveiller le tableau de bord en permanence.
+        {s.subheading}
       </p>
 
       <FormField
         name="types_alertes"
-        label="Types d'alertes nécessaires"
-        description="Sur quel(s) canal(aux) souhaitez-vous recevoir les alertes ? Pensez aux canaux les plus fiables dans votre contexte."
+        label={s.typesAlertes.label}
+        description={s.typesAlertes.description}
       >
         <div className="space-y-2">
           {typesAlertesList.map(type => (
@@ -28,7 +31,7 @@ export function Step6Alertes() {
                 {...register('types_alertes')}
                 className="rounded text-jokko-primary focus:ring-jokko-primary"
               />
-              <span className="text-sm">{type}</span>
+              <span className="text-sm">{dict.options.typesAlertes[type]}</span>
             </label>
           ))}
         </div>
@@ -36,8 +39,8 @@ export function Step6Alertes() {
 
       <FormField
         name="evenements_alertes"
-        label="Événements déclenchant une alerte prioritaire"
-        description="Quels types d'événements doivent déclencher une alerte immédiate pour votre équipe de coordination ?"
+        label={s.evenementsAlertes.label}
+        description={s.evenementsAlertes.description}
       >
         <div className="space-y-2">
           {evenementsAlertesList.map(evt => (
@@ -48,7 +51,7 @@ export function Step6Alertes() {
                 {...register('evenements_alertes')}
                 className="rounded text-jokko-primary focus:ring-jokko-primary"
               />
-              <span className="text-sm">{evt}</span>
+              <span className="text-sm">{dict.options.evenementsAlertes[evt]}</span>
             </label>
           ))}
         </div>
@@ -56,17 +59,17 @@ export function Step6Alertes() {
 
       <FormField
         name="canal_coordinateurs"
-        label="Canal principal de réception des alertes coordinateurs"
-        description="Sur quel appareil vos coordinateurs travaillent-ils principalement le jour de l'élection ?"
+        label={s.canalCoordinateurs.label}
+        description={s.canalCoordinateurs.description}
         required
       >
         <select
           {...register('canal_coordinateurs')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {canalCoordinateursList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.canalCoordinateurs[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.canalCoordinateurs[opt]}</option>
           ))}
         </select>
       </FormField>

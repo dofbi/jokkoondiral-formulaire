@@ -1,40 +1,43 @@
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
-import { qualiteConnexionList, appareilsList, coutServeurList, LABELS } from '@/schemas/formulaire'
+import { qualiteConnexionList, appareilsList, coutServeurList } from '@/schemas/formulaire'
+import { useLocale } from '@/i18n/LocaleContext'
 
 export function Step7Performance() {
   const { register } = useFormContext()
+  const { dict } = useLocale()
+  const s = dict.step7
 
   return (
     <div>
       <h2 className="text-2xl font-bold text-jokko-primary mb-2">
-        7. Légèreté &amp; performance
+        {s.heading}
       </h2>
       <p className="text-gray-500 text-sm mb-6">
-        La plateforme doit fonctionner dans les conditions réelles de votre terrain — connexion limitée, appareils bas de gamme, budget serveur serré.
+        {s.subheading}
       </p>
 
       <FormField
         name="qualite_connexion"
-        label="Qualité de la connexion internet sur le terrain"
-        description="Quelle est la qualité moyenne de la connexion internet dans les zones où vos observateurs sont déployés ?"
+        label={s.qualiteConnexion.label}
+        description={s.qualiteConnexion.description}
         required
       >
         <select
           {...register('qualite_connexion')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {qualiteConnexionList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.qualiteConnexion[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.qualiteConnexion[opt]}</option>
           ))}
         </select>
       </FormField>
 
       <FormField
         name="appareils"
-        label="Appareils utilisés par les observateurs"
-        description="Quels types d'appareils vos observateurs utilisent-ils pour saisir et envoyer leurs signalements ?"
+        label={s.appareils.label}
+        description={s.appareils.description}
         required
       >
         <div className="space-y-2">
@@ -46,7 +49,7 @@ export function Step7Performance() {
                 {...register('appareils')}
                 className="rounded text-jokko-primary focus:ring-jokko-primary"
               />
-              <span className="text-sm">{appareil}</span>
+              <span className="text-sm">{dict.options.appareils[appareil]}</span>
             </label>
           ))}
         </div>
@@ -54,8 +57,8 @@ export function Step7Performance() {
 
       <FormField
         name="importance_legerete"
-        label="Importance de la légèreté de l'application (1-5)"
-        description="Une application légère consomme peu de données mobiles et fonctionne sur des appareils d'entrée de gamme. Quelle est l'importance de ce critère pour vous ?"
+        label={s.importanceLegerete.label}
+        description={s.importanceLegerete.description}
         required
       >
         <input
@@ -66,24 +69,24 @@ export function Step7Performance() {
           className="w-full"
         />
         <div className="flex justify-between text-xs text-gray-500">
-          <span>1 — Peu important</span>
-          <span>5 — Très important</span>
+          <span>{s.importanceLegerete.low}</span>
+          <span>{s.importanceLegerete.high}</span>
         </div>
       </FormField>
 
       <FormField
         name="cout_serveur_max"
-        label="Budget mensuel maximum pour l'hébergement"
-        description="Quel est le budget mensuel maximum que votre organisation peut allouer à l'hébergement de la plateforme ?"
+        label={s.coutServeurMax.label}
+        description={s.coutServeurMax.description}
         required
       >
         <select
           {...register('cout_serveur_max')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {coutServeurList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.coutServeur[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.coutServeur[opt]}</option>
           ))}
         </select>
       </FormField>

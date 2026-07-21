@@ -1,40 +1,43 @@
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../FormField'
-import { prioriteControleList, capaciteHebergementList, menacesList, LABELS } from '@/schemas/formulaire'
+import { prioriteControleList, capaciteHebergementList, menacesList } from '@/schemas/formulaire'
+import { useLocale } from '@/i18n/LocaleContext'
 
 export function Step9Securite() {
   const { register } = useFormContext()
+  const { dict } = useLocale()
+  const s = dict.step9
 
   return (
     <div>
       <h2 className="text-2xl font-bold text-jokko-primary mb-2">
-        9. Contexte sécuritaire &amp; souveraineté des données
+        {s.heading}
       </h2>
       <p className="text-gray-500 text-sm mb-6">
-        La sécurité des données et des observateurs est une priorité. Ces informations nous permettent de calibrer les niveaux de protection nécessaires.
+        {s.subheading}
       </p>
 
       <FormField
         name="priorite_controle"
-        label="Importance du contrôle de vos données"
-        description="L'auto-hébergement signifie que vos données sont stockées sur vos propres serveurs, sans transiter par des services tiers (Google, AWS…). Quelle importance accordez-vous à ce point ?"
+        label={s.prioriteControle.label}
+        description={s.prioriteControle.description}
         required
       >
         <select
           {...register('priorite_controle')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {prioriteControleList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.prioriteControle[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.prioriteControle[opt]}</option>
           ))}
         </select>
       </FormField>
 
       <FormField
         name="menaces"
-        label="Menaces rencontrées dans votre contexte"
-        description="Cochez toutes les menaces auxquelles votre organisation et vos observateurs sont exposés. Ces informations restent confidentielles et nous aident à adapter les mesures de protection."
+        label={s.menaces.label}
+        description={s.menaces.description}
       >
         <div className="space-y-2">
           {menacesList.map(menace => (
@@ -45,7 +48,7 @@ export function Step9Securite() {
                 {...register('menaces')}
                 className="rounded text-jokko-primary focus:ring-jokko-primary"
               />
-              <span className="text-sm">{menace}</span>
+              <span className="text-sm">{dict.options.menaces[menace]}</span>
             </label>
           ))}
         </div>
@@ -53,25 +56,25 @@ export function Step9Securite() {
 
       <FormField
         name="capacite_hebergement"
-        label="Capacité d'auto-hébergement"
-        description="Avez-vous les capacités techniques pour héberger vous-même la plateforme sur vos serveurs, ou préférez-vous un hébergement cloud géré ?"
+        label={s.capaciteHebergement.label}
+        description={s.capaciteHebergement.description}
         required
       >
         <select
           {...register('capacite_hebergement')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
         >
-          <option value="">Sélectionnez</option>
+          <option value="">{dict.common.select}</option>
           {capaciteHebergementList.map(opt => (
-            <option key={opt} value={opt}>{LABELS.capaciteHebergement[opt]}</option>
+            <option key={opt} value={opt}>{dict.options.capaciteHebergement[opt]}</option>
           ))}
         </select>
       </FormField>
 
       <FormField
         name="niveau_maturite_num"
-        label="Niveau de maturité numérique de votre organisation (1-5)"
-        description="1 = Débutant (peu d'outils numériques, pas d'équipe tech) · 5 = Expert (équipe technique interne, développements maison)"
+        label={s.niveauMaturite.label}
+        description={s.niveauMaturite.description}
       >
         <input
           type="range"
@@ -81,22 +84,22 @@ export function Step9Securite() {
           className="w-full accent-jokko-primary"
         />
         <div className="flex justify-between text-xs text-gray-500 mt-1">
-          <span>1 — Débutant</span>
-          <span>3 — Intermédiaire</span>
-          <span>5 — Expert</span>
+          <span>{s.niveauMaturite.low}</span>
+          <span>{s.niveauMaturite.mid}</span>
+          <span>{s.niveauMaturite.high}</span>
         </div>
       </FormField>
 
       <FormField
         name="besoins_cybersecurite"
-        label="Besoins spécifiques en cybersécurité"
-        description="Avez-vous des besoins particuliers : chiffrement des communications, protection contre la surveillance, accès sécurisé pour les observateurs en zone à risque…"
+        label={s.besoinsCybersecurite.label}
+        description={s.besoinsCybersecurite.description}
       >
         <textarea
           {...register('besoins_cybersecurite')}
           rows={3}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jokko-primary focus:border-transparent"
-          placeholder="Décrivez vos besoins spécifiques en sécurité numérique..."
+          placeholder={s.besoinsCybersecurite.placeholder}
         />
       </FormField>
     </div>
