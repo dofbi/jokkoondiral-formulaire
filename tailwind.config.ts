@@ -10,10 +10,11 @@ const config: Config = {
     extend: {
       colors: {
         jokko: {
-          primary: '#1A5F7A',
-          secondary: '#159895',
-          accent: '#57C5B6',
-          light: '#F0FDFA',
+          primary: '#1B5E40',
+          secondary: '#2E7D52',
+          accent: '#3DAA77',
+          light: '#E8F5EE',
+          dark: '#0D2218',
         }
       }
     },

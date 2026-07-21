@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Jokkoondiral — Formulaire OSC',
+  title: 'Jokkondiral — Formulaire OSC',
   description: 'Plateforme d\'observation électorale citoyenne',
 }
 
@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <head>
-        <link rel="icon" type="image/svg+xml" href="/icons/Icone.svg" />
+        <link rel="icon" type="image/svg+xml" href="/icons/logo-icon.svg" />
       </head>
       <body className="bg-gray-50 min-h-screen">
         {children}

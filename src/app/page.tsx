@@ -8,14 +8,14 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 flex items-center space-x-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/icons/Icone.svg"
-            alt="Jokkoondiral"
+            src="/icons/logo-icon.svg"
+            alt="Jokkondiral"
             width={48}
             height={48}
             className="rounded-lg bg-white p-1"
           />
           <div>
-            <h1 className="text-2xl font-bold">JOKKOONDIRAL</h1>
+            <h1 className="text-2xl font-bold">Jokkondiral</h1>
             <p className="text-sm opacity-90">
               Observation électorale citoyenne panafricaine
             </p>
@@ -58,7 +58,7 @@ export default function Home() {
       <footer className="bg-gray-800 text-white py-6 mt-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <p className="text-sm opacity-75">
-            © 2026 Jokkoondiral — Plateforme d'observation électorale citoyenne
+            © 2026 Jokkondiral — Plateforme d'observation électorale citoyenne
           </p>
         </div>
       </footer>
