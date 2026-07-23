@@ -58,7 +58,7 @@ export const fr = {
     typeOrganisation: { label: "Type d'organisation" },
   },
   step2: {
-    heading: '2. Expérience &amp; outils actuels',
+    heading: '2. Expérience & outils actuels',
     subheading: "Ces informations nous aident à adapter la plateforme à votre niveau d'expérience et aux outils que vous utilisez déjà.",
     experienceAnnees: {
       label: "Expérience en déploiement d'observateurs électoraux",
@@ -84,7 +84,7 @@ export const fr = {
     },
   },
   step3: {
-    heading: '3. Géolocalisation &amp; cartographie',
+    heading: '3. Géolocalisation & cartographie',
     subheading: "La géolocalisation permet de situer chaque incident sur une carte et de visualiser les zones à risque en temps réel.",
     geoType: {
       label: 'Géolocalisation des incidents',
@@ -116,7 +116,7 @@ export const fr = {
     },
   },
   step5: {
-    heading: '5. Types de preuves &amp; pièces jointes',
+    heading: '5. Types de preuves & pièces jointes',
     subheading: 'Quels types de preuves vos observateurs peuvent-ils collecter et joindre à leurs signalements ?',
     typesPreuves: {
       label: 'Types de preuves collectées',
@@ -132,7 +132,7 @@ export const fr = {
     },
   },
   step6: {
-    heading: '6. Alertes &amp; notifications',
+    heading: '6. Alertes & notifications',
     subheading: "Un système d'alertes permet à vos coordinateurs d'être informés immédiatement des incidents critiques sans avoir à surveiller le tableau de bord en permanence.",
     typesAlertes: {
       label: "Types d'alertes nécessaires",
@@ -148,7 +148,7 @@ export const fr = {
     },
   },
   step7: {
-    heading: '7. Souplesse &amp; performance',
+    heading: '7. Souplesse & performance',
     subheading: "La plateforme doit fonctionner dans les conditions réelles de votre terrain — connexion limitée, appareils bas de gamme, budget serveur serré.",
     qualiteConnexion: {
       label: 'Qualité de la connexion internet sur le terrain',
@@ -177,7 +177,7 @@ export const fr = {
     nonNegociable: 'Non-négociable (top 3)',
   },
   step9: {
-    heading: '9. Contexte sécuritaire &amp; souveraineté des données',
+    heading: '9. Contexte sécuritaire & souveraineté des données',
     subheading: 'La sécurité des données et des observateurs est une priorité. Ces informations nous permettent de calibrer les niveaux de protection nécessaires.',
     prioriteControle: {
       label: 'Importance du contrôle de vos données',
@@ -211,7 +211,7 @@ export const fr = {
     contraintesNationales: { label: 'Contraintes spécifiques au contexte national', placeholder: 'Décrivez les contraintes spécifiques...' },
   },
   step11: {
-    heading: '11. Prochaines élections &amp; disponibilité',
+    heading: '11. Prochaines élections & disponibilité',
     subheading: "Ces informations nous aident à prioriser le développement et à planifier les sessions d'accompagnement avec votre organisation.",
     prochainScrutin: {
       label: 'Prochain scrutin / processus électoral',

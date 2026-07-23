@@ -60,7 +60,7 @@ export const en: typeof fr = {
     typeOrganisation: { label: 'Organisation type' },
   },
   step2: {
-    heading: '2. Experience &amp; current tools',
+    heading: '2. Experience & current tools',
     subheading: 'This information helps us adapt the platform to your experience level and the tools you already use.',
     experienceAnnees: {
       label: 'Experience deploying election observers',
@@ -86,7 +86,7 @@ export const en: typeof fr = {
     },
   },
   step3: {
-    heading: '3. Geolocation &amp; mapping',
+    heading: '3. Geolocation & mapping',
     subheading: 'Geolocation lets you place each incident on a map and visualise risk areas in real time.',
     geoType: {
       label: 'Incident geolocation',
@@ -118,7 +118,7 @@ export const en: typeof fr = {
     },
   },
   step5: {
-    heading: '5. Evidence types &amp; attachments',
+    heading: '5. Evidence types & attachments',
     subheading: 'What types of evidence can your observers collect and attach to their reports?',
     typesPreuves: {
       label: 'Types of evidence collected',
@@ -134,7 +134,7 @@ export const en: typeof fr = {
     },
   },
   step6: {
-    heading: '6. Alerts &amp; notifications',
+    heading: '6. Alerts & notifications',
     subheading: 'An alert system lets your coordinators be informed immediately of critical incidents without constantly watching the dashboard.',
     typesAlertes: {
       label: 'Required alert types',
@@ -150,7 +150,7 @@ export const en: typeof fr = {
     },
   },
   step7: {
-    heading: '7. Flexibility &amp; performance',
+    heading: '7. Flexibility & performance',
     subheading: 'The platform must work under the real conditions of your field — limited connectivity, low-end devices, tight server budget.',
     qualiteConnexion: {
       label: 'Internet connection quality in the field',
@@ -179,7 +179,7 @@ export const en: typeof fr = {
     nonNegociable: 'Non-negotiable (top 3)',
   },
   step9: {
-    heading: '9. Security context &amp; data sovereignty',
+    heading: '9. Security context & data sovereignty',
     subheading: 'The security of data and observers is a priority. This information lets us calibrate the required protection levels.',
     prioriteControle: {
       label: 'Importance of controlling your data',
@@ -213,7 +213,7 @@ export const en: typeof fr = {
     contraintesNationales: { label: 'Constraints specific to the national context', placeholder: 'Describe the specific constraints...' },
   },
   step11: {
-    heading: '11. Upcoming elections &amp; availability',
+    heading: '11. Upcoming elections & availability',
     subheading: 'This information helps us prioritise development and plan support sessions with your organisation.',
     prochainScrutin: {
       label: 'Next election / electoral process',
